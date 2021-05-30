@@ -134,7 +134,9 @@ h1 {
 }
 
 .recept {
+    
     display: flex;
+ 
     align-items: center;
     padding: 5px 20px 5px 5px;
     cursor: pointer;
@@ -178,6 +180,17 @@ h1 {
     object-fit: cover;
     object-position: center;
 }
+.recept-foto{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    flex: 0 0 70px;
+    width: 70px;
+    height: 70px;
+    overflow: hidden;
+    margin-right: 20px;
+}
 
 .recept-info {
     flex: 1;
@@ -189,7 +202,15 @@ h1 {
     transition: all 0.2s;
 }
 
+.recept-nadpis {
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+.recept-nadpis:hover {
+    color: #fda085;
 
+}
 
 
 .recept-detail {
@@ -247,3 +268,5 @@ h1 {
 .recept-detail h1 {
     color: #feada6;
 }
+
+
