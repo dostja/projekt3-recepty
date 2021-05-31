@@ -158,10 +158,16 @@ let receptObj = document.getElementById("recepty");
 let receptNadpis = document.querySelector(".recept-info");
 let miniObrazekRecept = document.getElementById("recept-obrazek");
 //let recept = document.querySelector(".recept");
+let aktualniRecepty;
 
 window.onload = function nacteniStranky() {
-  zmenRecept(0);
+  aktualniRecepty = recepty;
+
+  let defaultReceptId = localStorage.getItem("receptId") === undefined ? 0 : localStorage.getItem("receptId");
+
+  zmenRecept(defaultReceptId);
   receptMenu(recepty);
+
 
 };
 
@@ -170,9 +176,9 @@ function zvetsiRecept(caller) {
   console.log(caller.srcElement.getAttribute("id").split("_")[1]);
   let receptId = caller.srcElement.getAttribute("id").split("_")[1];
   
-  zmenRecept(receptId);
- 
-  
+  localStorage.setItem("receptId", receptId);  
+
+  zmenRecept(receptId);  
 }
 
 function zmenRecept(receptId) {
@@ -182,12 +188,12 @@ function zmenRecept(receptId) {
   let popisRecept = document.getElementById("recept-popis");
   let nadpisRecept = document.getElementById("recept-nazev");
 
-  for (let i = 0; i < recepty.length; i++) {
-    velkeFotoImg.src = recepty[receptId].img;
-    kategorieReceptSpan.innerHTML = recepty[receptId].kategorie;
-    hodnoceniReceptSpan.innerHTML = recepty[receptId].hodnoceni;
-    popisRecept.innerHTML = recepty[receptId].popis;
-    nadpisRecept.innerHTML = recepty[receptId].nadpis;
+  for (let i = 0; i < aktualniRecepty.length; i++) {
+    velkeFotoImg.src = aktualniRecepty[receptId].img;
+    kategorieReceptSpan.innerHTML = aktualniRecepty[receptId].kategorie;
+    hodnoceniReceptSpan.innerHTML = aktualniRecepty[receptId].hodnoceni;
+    popisRecept.innerHTML = aktualniRecepty[receptId].popis;
+    nadpisRecept.innerHTML = aktualniRecepty[receptId].nadpis;
   }
 
 }
@@ -210,9 +216,21 @@ function filtujRecepty(recepty2) {
     return recept.kategorie.toUpperCase().indexOf(filterKategorie) > -1;
   });
 
+
   // 3. razeni podle hodnoceni
   seradReceptyDleHodnoceni(noveRecepty);
 
+  console.log(
+    noveRecepty.reduce((a, item) => {
+      if (item.kategorie === 'Snídaně') {
+        a.push({
+          ...item,
+          index: a.length
+        });
+      }
+      return a;
+    }, [])
+  );
   return noveRecepty;
 }
 
@@ -222,6 +240,7 @@ function hledejRecept() {
   }
 
   let filtrovaneRecepty = filtujRecepty(recepty);
+  aktualniRecepty = filtrovaneRecepty;
 
   receptMenu(filtrovaneRecepty);
 }
